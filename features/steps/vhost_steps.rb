@@ -3,7 +3,6 @@ require 'rubygems'
 require 'libvirt'
 require 'xmlrpc/client'
 require 'net/ssh'
-require 'cobravsmongoose'
 
 # setup the globals
 
@@ -24,19 +23,25 @@ cblr_api = XMLRPC::Client.new(@cobbler_server,"/cobbler_api",@cobbler_port)
 
 Given /^that I want to build a server of type "([^"]*)"$/ do |serverType|
   # connect to cobbler and check the type exists
-  @xml_description = cblr_api.call("get_system_for_koan",serverType)
+  @xml_description = cblr_api.call("get_system_for_koan",serverType).inspect
 
-  virt_mem = @xml_description['virt_ram'] * 1024
+  virt_mem = @xml_description['virt_ram'].to_i
 
-  puts <<-eos
+  puts "Virtual Memory = " + virt_mem.to_s
+
+  virt_ram = virt_mem.to_i / 1024
+  mac = @xml_description['eth0']['mac_address']
+  virt_bridge = @xml_description['eth0']['virt_bridge']
+
+  xmloutput = <<-eos
 <domain type='kvm'>
   <name>#{@xml_description['hostname']}</name>
   <uuid></uuid>
-  <memory>#{virt_mem}</memory>
-  <currentMemory>#{virt_mem}</currentMemory>
+  <memory>#{virt_ram}</memory>
+  <currentMemory>#{virt_ram}</currentMemory>
   <vcpu>#{@xml_description['virt_cpus']}</vcpu>
   <os>
-    <type arch='x86_64' machine='pc-0.12'>hvm</type>
+    <type arch='#{@xml_description['arch']}' machine='pc-0.12'>hvm</type>
     <boot dev='hd'/>
   </os>
   <features>
@@ -51,12 +56,12 @@ Given /^that I want to build a server of type "([^"]*)"$/ do |serverType|
   <devices>
     <emulator>/usr/bin/kvm</emulator>
     <disk type='file' device='disk'>
-      <source file='/home/mwallace/.VirtualBox/kvm-images/icinga-disk0'/>
+      <source file='#{@xml_description['virt_path'] + @xml_description['hostname']}/>
       <target dev='hda' bus='ide'/>
     </disk>
     <interface type='bridge'>
-      <mac address='00:16:3e:5d:0f:6f'/>
-      <source bridge='virbr0'/>
+      <mac address='#{mac}'/>
+      <source bridge='#{virt_bridge}'/>
     </interface>
     <console type='pty'>
       <target port='0'/>
