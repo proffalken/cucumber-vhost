@@ -1,7 +1,31 @@
+#require the relevant libraries
+require 'rubygems'
+require 'libvirt'
+require 'xmlrpc/client'
+require 'net/ssh'
+require 'net/ping'
+
+# setup the globals
+
+#cobbler server:
+@cobbler_server = "localhost"
+@cobbler_port = "80"
+
+#Libvirt
+@libvirt_host = ""
+@libvirt_type = "system"
 
 
-Give  /^that I want to build a server of type "([^"]*)"$/ do |arg1|
-  pending # express the regexp above with the code you wish you had
+## VM Connection
+@vmconn =  Libvirt::open("qemu://#{@libvirt_host}/#{@libvirt_type}")
+
+## Cobbler API
+@cblr_api = XMLRPC::Client.new(@cobbler_server,"/cobbler_api",@cobbler_port)
+
+Given /^that I want to build a server of type "([^"]*)"$/ do |serverType|
+  # connect to cobbler and check the type exists
+  @xml_description = @cblr_api.call("get_system",serverType).inspect
+  puts @xml_description
 end
 
 Then /^I should be able to connect to the provisioning server$/ do
