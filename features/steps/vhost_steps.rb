@@ -23,7 +23,7 @@ cblr_api = XMLRPC::Client.new(@cobbler_server,"/cobbler_api",@cobbler_port)
 
 Given /^that I want to build a server of type "([^"]*)"$/ do |serverType|
   # connect to cobbler and check the type exists
-  @xml_description = cblr_api.call("get_system",serverType).inspect
+  @xml_description = cblr_api.call("get_system_for_koan",serverType).inspect
   puts @xml_description
 end
 
