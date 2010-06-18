@@ -3,7 +3,6 @@ require 'rubygems'
 require 'libvirt'
 require 'xmlrpc/client'
 require 'net/ssh'
-require 'net/ping'
 
 # setup the globals
 
@@ -20,11 +19,11 @@ require 'net/ping'
 @vmconn =  Libvirt::open("qemu://#{@libvirt_host}/#{@libvirt_type}")
 
 ## Cobbler API
-@cblr_api = XMLRPC::Client.new(@cobbler_server,"/cobbler_api",@cobbler_port)
+cblr_api = XMLRPC::Client.new(@cobbler_server,"/cobbler_api",@cobbler_port)
 
 Given /^that I want to build a server of type "([^"]*)"$/ do |serverType|
   # connect to cobbler and check the type exists
-  @xml_description = @cblr_api.call("get_system",serverType).inspect
+  @xml_description = cblr_api.call("get_system",serverType).inspect
   puts @xml_description
 end
 
