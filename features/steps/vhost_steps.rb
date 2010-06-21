@@ -22,9 +22,16 @@ require 'net/ssh'
 cblr_api = XMLRPC::Client.new(@cobbler_server,"/cobbler_api",@cobbler_port)
 
 Given /^that I want to build a server of type "([^"]*)"$/ do |serverType|
-  # connect to cobbler and check the type exists
-  @xml_description = cblr_api.call("get_system_for_koan",serverType).inspect
+  puts "Building Continuous Integration Environment for #{serverType}"
+  @serverType = serverType
+end
 
+Then /^I should be able to connect to the provisioning server$/ do
+  # connect to cobbler and check the type exists
+  @xml_description = cblr_api.call("get_system_for_koan",@serverType).inspect
+end
+
+Then /^I should recieve an XML file$/ do
   virt_mem = @xml_description['virt_ram'].to_i
 
   puts "Virtual Memory = " + virt_mem.to_s
@@ -33,7 +40,7 @@ Given /^that I want to build a server of type "([^"]*)"$/ do |serverType|
   mac = @xml_description['eth0']['mac_address']
   virt_bridge = @xml_description['eth0']['virt_bridge']
 
-  xmloutput = <<-eos
+  @xmloutput = <<-eos
 <domain type='kvm'>
   <name>#{@xml_description['hostname']}</name>
   <uuid></uuid>
@@ -78,14 +85,6 @@ Given /^that I want to build a server of type "([^"]*)"$/ do |serverType|
 </domain>
 
 eos
-end
-
-Then /^I should be able to connect to the provisioning server$/ do
-  pending # express the regexp above with the code you wish you had
-end
-
-Then /^I should recieve an XML file$/ do
-  pending # express the regexp above with the code you wish you had
 end
 
 Then /^I should create the virtual machine$/ do
