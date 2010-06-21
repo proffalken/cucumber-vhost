@@ -23,7 +23,7 @@ require 'net/ssh'
 
 
 ## Cobbler API
-cblr_api = XMLRPC::Client.new(@cobbler_server,"/cobbler_api",@cobbler_port)
+@cblr_api = XMLRPC::Client.new(@cobbler_server,"/cobbler_api",@cobbler_port)
 
 Given /^that I want to build a server of type "([^"]*)"$/ do |serverType|
   puts "Building Continuous Integration Environment for #{serverType}"
@@ -32,7 +32,7 @@ end
 
 Then /^I should be able to connect to the provisioning server$/ do
   # connect to cobbler and check the type exists
-  @xml_description = cblr_api.call("get_system_for_koan",@serverType)
+  @xml_description = @cblr_api.call("get_system_for_koan",@serverType)
 end
 
 Then /^I should recieve an XML file$/ do
@@ -98,9 +98,10 @@ eos
         </target>
       </volume>
 eos
+end
 
 Then /^I should create the virtual machine$/ do
-  @vm_stor.create_vol_xml(@disk_xmloutput)
+  vm_stor.create_vol_xml(@disk_xmloutput)
   @vmconn.define_domain_xml(@sys_xmloutput)
 end
 
