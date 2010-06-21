@@ -28,21 +28,18 @@ end
 
 Then /^I should be able to connect to the provisioning server$/ do
   # connect to cobbler and check the type exists
-  @xml_description = cblr_api.call("get_system_for_koan",@serverType).inspect
+  @xml_description = cblr_api.call("get_system_for_koan",@serverType)
 end
 
 Then /^I should recieve an XML file$/ do
   virt_mem = @xml_description['virt_ram'].to_i
-
-  puts "Virtual Memory = " + virt_mem.to_s
-
-  virt_ram = virt_mem.to_i / 1024
-  mac = @xml_description['eth0']['mac_address']
-  virt_bridge = @xml_description['eth0']['virt_bridge']
+  virt_ram = virt_mem.to_i * 1024
+  mac = @xml_description['interfaces']['eth0']['mac_address']
+  virt_bridge = @xml_description['interfaces']['eth0']['virt_bridge']
 
   @xmloutput = <<-eos
 <domain type='kvm'>
-  <name>#{@xml_description['hostname']}</name>
+  <name>#{@xml_description['hostname']}-ci-build</name>
   <uuid></uuid>
   <memory>#{virt_ram}</memory>
   <currentMemory>#{virt_ram}</currentMemory>
@@ -63,7 +60,7 @@ Then /^I should recieve an XML file$/ do
   <devices>
     <emulator>/usr/bin/kvm</emulator>
     <disk type='file' device='disk'>
-      <source file='#{@xml_description['virt_path'] + @xml_description['hostname']}/>
+      <source file='#{@xml_description['virt_path'] + @xml_description['hostname']}'/>
       <target dev='hda' bus='ide'/>
     </disk>
     <interface type='bridge'>
@@ -83,28 +80,27 @@ Then /^I should recieve an XML file$/ do
     </video>
   </devices>
 </domain>
-
 eos
 end
 
 Then /^I should create the virtual machine$/ do
-  pending # express the regexp above with the code you wish you had
+  @vmconn.define_domain_xml(@xmloutput)
 end
 
 Given /^that I want to confirm the server has been provisioned$/ do
-  pending # express the regexp above with the code you wish you had
+  puts "Checking server #{@serverType}-ci-build has been provisioned"
 end
 
 Then /^I should connect libvirt$/ do
-  pending # express the regexp above with the code you wish you had
 end
 
 Then /^I should check the status of the server$/ do
-  pending # express the regexp above with the code you wish you had
+ puts "checking for VM #{@serverType}-ci-build"
+ ciDomain = @vmconn.lookup_domain_by_name("#{@serverType}-ci-build")
 end
 
 Then /^the server should be "([^"]*)"$/ do |arg1|
-  pending # express the regexp above with the code you wish you had
+  puts @ciDomain.info['state']
 end
 
 Given /^that I want to confirm the server is running$/ do
