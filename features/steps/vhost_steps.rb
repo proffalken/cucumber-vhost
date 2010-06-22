@@ -17,13 +17,13 @@ require 'net/ssh'
 
 
 ## VM Connection
-@vmconn =  Libvirt::open("qemu://#{@libvirt_host}/#{@libvirt_type}")
+vmconn =  Libvirt::open("qemu://#{@libvirt_host}/#{@libvirt_type}")
 ### VM Storage
-@vm_stor = @vmconn.lookup_storage_pool_by_name(@libvirt_storage_pool)   
+vm_stor = vmconn.lookup_storage_pool_by_name(@libvirt_storage_pool)   
 
 
 ## Cobbler API
-@cblr_api = XMLRPC::Client.new(@cobbler_server,"/cobbler_api",@cobbler_port)
+cblr_api = XMLRPC::Client.new(@cobbler_server,"/cobbler_api",@cobbler_port)
 
 Given /^that I want to build a server of type "([^"]*)"$/ do |serverType|
   puts "Building Continuous Integration Environment for #{serverType}"
@@ -32,7 +32,7 @@ end
 
 Then /^I should be able to connect to the provisioning server$/ do
   # connect to cobbler and check the type exists
-  @xml_description = @cblr_api.call("get_system_for_koan",@serverType)
+  @xml_description = cblr_api.call("get_system_for_koan",@serverType)
 end
 
 Then /^I should recieve an XML file$/ do
@@ -50,7 +50,7 @@ Then /^I should recieve an XML file$/ do
   <vcpu>#{@xml_description['virt_cpus']}</vcpu>
   <os>
     <type arch='#{@xml_description['arch']}' machine='pc-0.12'>hvm</type>
-    <boot dev='hd'/>
+    <boot dev='hd' />
     <boot dev='network' />
   </os>
   <features>
@@ -102,23 +102,22 @@ end
 
 Then /^I should create the virtual machine$/ do
   vm_stor.create_vol_xml(@disk_xmloutput)
-  @vmconn.define_domain_xml(@sys_xmloutput)
+  vmconn.define_domain_xml(@sys_xmloutput)
 end
 
 Given /^that I want to confirm the server has been provisioned$/ do
-  puts "Checking server #{@serverType}-ci-build has been provisioned"
 end
 
 Then /^I should connect libvirt$/ do
 end
 
 Then /^I should check the status of the server$/ do
- puts "checking for VM #{@serverType}-ci-build"
- ciDomain = @vmconn.lookup_domain_by_name("#{@serverType}-ci-build")
+  serverName = @xml_description['hostname']+"-ci-build"
+ ciDomain = vmconn.lookup_domain_by_name(serverNme)
 end
 
 Then /^the server should be "([^"]*)"$/ do |arg1|
-  puts @ciDomain.info['state']
+  puts ciDomain.info['state']
 end
 
 Given /^that I want to confirm the server is running$/ do
