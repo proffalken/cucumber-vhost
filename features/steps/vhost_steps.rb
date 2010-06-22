@@ -112,12 +112,12 @@ Then /^I should connect libvirt$/ do
 end
 
 Then /^I should check the status of the server$/ do
-  serverName = @xml_description['hostname']+"-ci-build"
- # ciDomain = vmconn.lookup_domain_by_name(serverNme)
+  #serverName = @xml_description['hostname']+"-ci-build"
+  #ciDomain = vmconn.lookup_domain_by_name(serverNme)
 end
 
 Then /^the server should be "([^"]*)"$/ do |arg1|
-  puts ciDomain.info['state']
+  # puts ciDomain.info['state']
 end
 
 Given /^that I want to confirm the server is running$/ do
