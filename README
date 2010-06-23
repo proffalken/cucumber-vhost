@@ -7,4 +7,33 @@ The system relies on Cobbler and Libvirt - there are a few posts on getting cobb
 
 This software is released under the GPL, I'll add the full license text shortly.
 
-This is not a working product yet, just the bones of one... :)
+This is also still in beta!
+
+EXAMPLE 
+=======
+
+This script is the basis for launching a VM and checking that it is up
+After that, it's all over to you! :)
+
+An example that uses all of the steps that are currently available is below (Comments at the end of each line following a #), feel free to add extra steps...
+
+Feature: Testing Vhosts
+	This feature is to be used to create and manage vhosts
+
+	Scenario: Provision the server
+		Given that I want to build a server of type "test"   		# "test" is the name of the system in cobbler
+		Then I should be able to connect to the provisioning server  	# This retrieves the hash from cobbler
+		And I should recieve an XML file				# This craetes the libvirt XML format
+		And I should create the virtual machine				# This defines the domain and launches the virtual machine
+
+	Scenario: Check the server has been built
+		Given that I want to confirm the server "test" has been provisioned  	# connect to cobbler and retrieve the hostname
+		Then I should check the status of the server				# connect to libvirt and check the status
+		And the server should have a status of "running"			# confirm the status is either "running" or "stopped"
+
+	Scenario: Check the server has powered on correctly
+		Given that I want to confirm the server "test" is running		# connect to cobbler and retrieve the hostname
+		Then I should check the status of the server				# connect to libvirt and check the status
+		And the server should be "running"					# confirm the status is either "running" or "stoped"
+		Then I should ping the server 						# ping the server on the IP retrieved from cobbler until it suceeds
+		And then I should be able to connect via SSH				# connect using Net::SSH and verify that you get a response

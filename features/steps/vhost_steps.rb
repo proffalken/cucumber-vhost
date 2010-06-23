@@ -90,9 +90,20 @@ Then /^I should check the status of the server$/ do
   @ciDomain = @vmconn.lookup_domain_by_name(serverName.to_s  + "-ci-build")
 end
 
-Then /^the server should be "([^"]*)"$/ do |arg1|
-  state = @ciDomain.info.inspect
-  puts state
+Then /^the server should have a status of "([^"]*)"$/ do |requestedStatus|
+  curState = @ciDomain.info.state
+  case requestedStatus
+	when "running" then reqState = 1
+	when "stopped" then reqState = 5
+  end
+  case curState
+	when 1 then actualStatus = "running"
+	when 5 then actualStatus = "stopped"
+	else actualStatus = "Unknown"
+  end
+
+  raise ArgumentError, "The VM was requested to be #{requestedStatus} however it was found to be #{actualStatus}" unless reqState == curState
+  
 end
 
 Then /^I should ping the server$/ do

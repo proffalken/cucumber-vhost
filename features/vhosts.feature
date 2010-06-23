@@ -10,7 +10,7 @@ Feature: Testing Vhosts
 	Scenario: Check the server has been built
 		Given that I want to confirm the server "test" has been provisioned
 		Then I should check the status of the server
-		And the server should be "running"
+		And the server should have a status of "running"
 
 	Scenario: Check the server has powered on correctly
 		Given that I want to confirm the server "test" is running
