@@ -5,9 +5,18 @@ This was designed and written to enable me to test code on Virtual Machines with
 
 The system relies on Cobbler and Libvirt - there are a few posts on getting cobbler up and running on my blog: http://www.threedrunkensysadsonthe.net/
 
-This software is released under the GPL, I'll add the full license text shortly.
-
 This is also still in beta!
+
+The software contained in this package are Copyright (c) 2010 Matthew Macdonald-Wallace and are released under the GPL
+
+"cucumber-vhost" is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+"cucumber-vhost" is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with cucumber-vhost.  If not, see <http://www.gnu.org/licenses/&gt;.
+
+
 
 EXAMPLE 
 =======
