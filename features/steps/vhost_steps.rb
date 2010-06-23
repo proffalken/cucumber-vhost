@@ -44,7 +44,7 @@ Then /^I should recieve an XML file$/ do
     <interface type='bridge'>
       <mac address='#{mac}'/>
       <source bridge='#{virt_bridge}'/>
-      <model type='rtl8139' />
+      <model type='virtio' />
     </interface>
     <console type='pty'>
       <target port='0'/>
@@ -76,33 +76,23 @@ end
 Then /^I should create the virtual machine$/ do
   @vm_stor.create_vol_xml(@disk_xmloutput)
   @vmconn.define_domain_xml(@sys_xmloutput)
+  domain = @vmconn.lookup_domain_by_name(@xml_description['hostname']+"-ci-build")
+  domain.create()
 end
 
-Given /^that I want to confirm the server has been provisioned$/ do
-end
-
-Then /^I should connect libvirt$/ do
+Given /^that I want to confirm the server "([^"]*)" has been provisioned$/ do |serverType|
+	@serverType = serverType
 end
 
 Then /^I should check the status of the server$/ do
-  serverName = @xml_description['hostname']
-  ciDomain = @vmconn.lookup_domain_by_name(serverName+"-ci-build")
+  xml_description = @cblr_api.call("get_system_for_koan",@serverType)
+  serverName = xml_description['hostname']
+  @ciDomain = @vmconn.lookup_domain_by_name(serverName.to_s  + "-ci-build")
 end
 
 Then /^the server should be "([^"]*)"$/ do |arg1|
-  # puts ciDomain.info['state']
-end
-
-Given /^that I want to confirm the server is running$/ do
-  pending # express the regexp above with the code you wish you had
-end
-
-Then /^I should connect to libvirt$/ do
-  pending # express the regexp above with the code you wish you had
-end
-
-Then /^confirm the status is running$/ do
-  pending # express the regexp above with the code you wish you had
+  state = @ciDomain.info.inspect
+  puts state
 end
 
 Then /^I should ping the server$/ do
