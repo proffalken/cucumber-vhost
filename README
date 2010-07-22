@@ -11,10 +11,9 @@ The software contained in this package are Copyright (c) 2010 Matthew Macdonald-
 
 "cucumber-vhost" is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-"cucumber-vhost" is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+"cucumber-vhost" is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with cucumber-vhost.  If not, see <http://www.gnu.org/licenses/&gt;.
+You should have received a copy of the GNU General Public License along with cucumber-vhost.  If not, see http://www.gnu.org/licenses/.
 
 
 
@@ -49,3 +48,11 @@ Feature: Testing Vhosts
 		And the server should be "running"					# confirm the status is either "running" or "stoped"
 		Then I should ping the server 						# ping the server on the IP retrieved from cobbler until it suceeds
 		And then I should be able to connect via SSH				# connect using Net::SSH and verify that you get a response
+
+	Scenario: Destroy the server
+		Given that I want to destroy the server "test"				# connect to cobbler and retrieve the hostname
+		Then I should check the status of the server				# connect to libvirt and check the status
+		And I should destroy the server						# use libvirt to destroy the server (forced shutdown)
+		And I should destroy the associated storage				# use libvirt to undefine the storage
+		And I should undefine the server					# use libvirt to undefine the server
+
