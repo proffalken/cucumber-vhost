@@ -114,3 +114,19 @@ Then /^then I should be able to connect via SSH$/ do
   pending # express the regexp above with the code you wish you had
 end
 
+Given /^that I want to destroy the server "([^\"]*)"$/ do |serverType|
+	@serverType = serverType
+end
+
+Then /^I should destroy the server$/ do
+	@ciDomain.destroy()
+end
+
+Then /^I should destroy the associated storage$/ do
+	@vmconn.vol.delete("#{@xml_description['virt_path'] + "/" + @xml_description['hostname']}-ci-build.img")
+end
+
+Then /^I should undefine the server$/ do
+	@ciDomain.undefine()
+end
+
