@@ -11,13 +11,14 @@ Before do
 @cobbler_port = "80"
 
 #Libvirt
+@libvirt_driver = "qemu" # can be any of qemu, vbox, xen, openvz, one, esx, gsx as detailed on the libvirt wiki
 @libvirt_host = ""
 @libvirt_type = "system"
 @libvirt_storage_pool = "VBox"
 
 
 ## VM Connection
-@vmconn =  Libvirt::open("qemu://#{@libvirt_host}/#{@libvirt_type}")
+@vmconn =  Libvirt::open("#{@libvirt_driver}://#{@libvirt_host}/#{@libvirt_type}")
 ### VM Storage
 @vm_stor = @vmconn.lookup_storage_pool_by_name(@libvirt_storage_pool)   
 
