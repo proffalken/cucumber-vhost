@@ -1,3 +1,6 @@
+# This file is licensed under the GPL V. 2.0 or higher
+
+
 #require the relevant libraries
 require 'rubygems'
 require 'libvirt'
