@@ -123,10 +123,14 @@ Then /^I should destroy the server$/ do
 end
 
 Then /^I should destroy the associated storage$/ do
-	@vmconn.vol.delete("#{@xml_description['virt_path'] + "/" + @xml_description['hostname']}-ci-build.img")
+	path = @xml_description['virt_path'] + "/" + @xml_description['hostname'] + "-ci-build.img"
+	puts "Trying to delete #{path}"
+	volume = @vm_stor.lookup_volume_by_path("#{@xml_description['virt_path'] + "/" + @xml_description['hostname']}-ci-build.img")
+	volume.delete()	
 end
 
 Then /^I should undefine the server$/ do
 	@ciDomain.undefine()
+	
 end
 
