@@ -117,9 +117,9 @@ end
 # find out what we should be checking for
 Then /^I should check the status of the server$/ do
   # retrieve the serverType info from cobbler
-  xml_description = @cblr_api.call("get_system_for_koan",@serverType)
+  @xml_description = @cblr_api.call("get_system_for_koan",@serverType)
   # get the hostname
-  serverName = xml_description['hostname']
+  serverName = @xml_description['hostname']
   # Connect to libvirt and create a domain object based upon the "ci-build" hostname
   @ciDomain = @vmconn.lookup_domain_by_name(serverName.to_s  + "-ci-build")
 end
@@ -152,7 +152,11 @@ end
 
 # I really need to get around to writing these tests!
 Then /^I should ping the server$/ do
-  pending # express the regexp above with the code you wish you had
+	# ping the value of the IP Address retrieved from the xml_description
+	while Ping.pingecho(@xml_description['interfaces']['eth0']['ip_address']) == false do
+		sleep(20)
+	end
+		
 end
 
 Then /^then I should be able to connect via SSH$/ do

@@ -6,6 +6,7 @@ require 'rubygems'
 require 'libvirt'
 require 'xmlrpc/client'
 require 'net/ssh'
+require 'ping'
 
 # setup the globals
 Before do
