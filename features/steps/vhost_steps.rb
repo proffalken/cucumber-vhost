@@ -159,10 +159,11 @@ Then /^I should ping the server$/ do
 		
 end
 
-Then /^then I should be able to connect via SSH$/ do
-  pending # express the regexp above with the code you wish you had
+Then /^I should be able to connect the server on port "([^"]*)"$/ do |port|
+	while Ping.pingecho(@xml_description['interfaces']['eth0']['ip_address'],'10',"#{port}") == false do
+		sleep(10)
+	end
 end
-
 
 # All the tests that we wanted to run are now complete, let's throw away the server so we know that we are always starting from a clean system next time.
 

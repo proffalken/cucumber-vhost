@@ -17,7 +17,7 @@ Feature: Testing Vhosts
 		Then I should check the status of the server
 		And the server should have a status of "running"
 		Then I should ping the server 
-		And then I should be able to connect via SSH
+		And I should be able to connect the server on port "22"
 	
 	Scenario: Destroy the server
 		Given that I want to destroy the server "test"

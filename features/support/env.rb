@@ -30,5 +30,4 @@ Before do
 ## Cobbler API
 @cblr_api = XMLRPC::Client.new(@cobbler_server,"/cobbler_api",@cobbler_port)
 
-## declare blank var to see if that fixes issues in steps.rb
 end
