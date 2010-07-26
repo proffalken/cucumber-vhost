@@ -7,6 +7,8 @@ require 'libvirt'
 require 'xmlrpc/client'
 require 'net/ssh'
 require 'ping'
+require 'socket'
+require 'timeout'
 
 # setup the globals
 Before do
@@ -29,5 +31,24 @@ Before do
 
 ## Cobbler API
 @cblr_api = XMLRPC::Client.new(@cobbler_server,"/cobbler_api",@cobbler_port)
+
+### define the port-checker code
+def is_port_open(ip, port)
+  begin
+    Timeout::timeout(1) do
+      begin
+        s = TCPSocket.new(ip, port)
+        s.close
+        return true
+      rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
+        return false
+      end
+    end
+  rescue Timeout::Error
+  end
+
+  return false
+end
+
 
 end

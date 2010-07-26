@@ -153,14 +153,14 @@ end
 # I really need to get around to writing these tests!
 Then /^I should ping the server$/ do
 	# ping the value of the IP Address retrieved from the xml_description
-	while Ping.pingecho(@xml_description['interfaces']['eth0']['ip_address']) == false do
+	while Ping.pingecho(@xml_description['interfaces']['eth0']['ip_address'])  == false do
 		sleep(20)
 	end
 		
 end
 
 Then /^I should be able to connect the server on port "([^"]*)"$/ do |port|
-	while Ping.pingecho(@xml_description['interfaces']['eth0']['ip_address'],'10',"#{port}") == false do
+	while is_port_open(@xml_description['interfaces']['eth0']['ip_address'],port) == false do
 		sleep(10)
 	end
 end
