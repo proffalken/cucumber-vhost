@@ -28,23 +28,23 @@ An example that uses all of the steps that are currently available is below (Com
 Feature: Testing Vhosts
 	This feature is to be used to create and manage vhosts
 
-	Scenario: Provision the server							# I recommend that you don't edit this scenario and have it as the first step!
-		Given that I want to build a server of type "test"			# Set the type of server to be provisioned to the system name in cobbler
-		Then I should be able to connect to the provisioning server		# Initiate the connection to Cobbler via the API
-		And I should recieve an XML file					# retrieve the XML from cobbler via the API
-		And I should create the virtual machine					# define the machine under LibVirt and create/start it
+	Scenario: Provision the server		# I recommend that you don't edit this scenario and have it as the first step!
+		Given that I want to build a server of type "test"		# Set the type of server to be provisioned to the system name in cobbler
+		Then I should be able to connect to the provisioning server	# Initiate the connection to Cobbler via the API
+		And I should recieve an XML file				# retrieve the XML from cobbler via the API
+		And I should create the virtual machine				# define the machine under LibVirt and create/start it
 
 	Scenario: Check the server has been built
-		Given that I want to confirm the server "test" has been provisioned	# Set the system name in cobbler to be tested, connect to the API and get the hostname
-		Then I should check the status of the server				# Use LibVirt to get the status of the VM
-		And the server should have a status of "running"			# Confirm that the current reported status matches the requested status
+		Given that I want to confirm the server "test" has been provisioned  # Set the system name in cobbler to be tested and connect to the API
+		Then I should check the status of the server			     # Use LibVirt to get the status of the VM
+		And the server should have a status of "running"		     # Confirm that the current reported status matches the requested status
 
 	Scenario: Check the server has powered on correctly
 		Given that I want to confirm the server "test" has been provisioned	# Set the system name to be tested
 		Then I should check the status of the server				# Check the status
 		And the server should have a status of "running"			# Confirm it matches the running status
 		Then I should ping the server 						# Ping the IP of eth0 (as defined in cobbler) of the server to confirm it is up
-		And I should be able to connect the server on port "22"			# Connect to an arbitary port (22 in this case) to make sure a service is responding
+		And I should be able to connect the server on port "22"			# Connect to a port to ensure a service is running [0]
 	
 	Scenario: Destroy the server
 		Given that I want to destroy the server "test"				# Again, set the system name from cobbler to be destroyed
@@ -54,3 +54,7 @@ Feature: Testing Vhosts
 		And I should destroy the associated storage				# Destroy the associated Storage
 		And I should undefine the server					# Undefine the system - this removes all traces of the system
 		
+
+[0] A caveat - for this to work correctly, you can't use port 22 because the Redhat Installer starts a SSH daemon during the install which means this test suceeds before the server is fully provisioned.  I recommend setting the vale of "port" to the service that you are testing and you'll need to make sure the firewall is set to allow traffic on that port before this test will succeed.  
+
+The code has been written to wait until the ping succeeds and the same is true for the port checker - if you need mroe flexibility than this, please feel free to fork and then merge back the changes!
