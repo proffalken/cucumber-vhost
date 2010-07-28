@@ -36,7 +36,7 @@ Then /^I should recieve an XML file$/ do
   <currentMemory>#{virt_ram}</currentMemory>
   <vcpu>#{@xml_description['virt_cpus']}</vcpu>
   <os>
-    <type arch='#{@xml_description['arch']}' machine='pc-0.12'>hvm</type>
+    <type arch='#{@xml_description['arch']}' machine='pc'>hvm</type>
     <boot dev='hd' />
     <boot dev='network' />
   </os>
