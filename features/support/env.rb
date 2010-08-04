@@ -20,7 +20,7 @@ Before do
 @libvirt_driver = "qemu" # can be any of qemu, vbox, xen, openvz, one, esx, gsx as detailed on the libvirt wiki
 @libvirt_host = ""
 @libvirt_type = "system"
-@libvirt_storage_pool = "VBox"
+@libvirt_storage_pool = "default"
 
 
 ## VM Connection
