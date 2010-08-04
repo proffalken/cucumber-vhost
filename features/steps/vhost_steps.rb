@@ -152,16 +152,26 @@ end
 
 # I really need to get around to writing these tests!
 Then /^I should ping the server$/ do
+	# Set a counter so this script can bail if the build takes too long/fails to ping
+	counter = 0
 	# ping the value of the IP Address retrieved from the xml_description
 	while Ping.pingecho(@xml_description['interfaces']['eth0']['ip_address'])  == false do
-		sleep(20)
+		sleep(10)
+		counter = counter +1
+		puts "Counter currently at: #{counter}"
+		raise ArgumentError, "It's taken over five minutes to try and ping this system, I'm bailing out now!" unless counter < 30
 	end
-		
+	puts "I can ping the host! :)"
 end
 
 Then /^I should be able to connect the server on port "([^"]*)"$/ do |port|
+	# Make sure the port checker doesn't time out
+	ccounter = 0
 	while is_port_open(@xml_description['interfaces']['eth0']['ip_address'],port) == false do
 		sleep(10)
+		ccounter = ccounter + 1
+		puts "Connection Counter currently at #{ccounter}"
+		raise ArgumentError "No connection to port #{port} on this server after five minutes, bailing out now..." unless ccounter < 30
 	end
 end
 
