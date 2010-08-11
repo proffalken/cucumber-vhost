@@ -19,11 +19,11 @@ Feature: Testing Vhosts
 		Then I should ping the server 
 		And I should be able to connect the server on port "80"
 	
-########Scenario: Destroy the server
-########	Given that I want to destroy the server "test"
-########	Then I should be able to connect to the provisioning server
-########	Then I should check the status of the server
-########	And I should destroy the server
-########	And I should destroy the associated storage
-########	And I should undefine the server
-########	
+	Scenario: Destroy the server
+		Given that I want to destroy the server "test"
+		Then I should be able to connect to the provisioning server
+		Then I should check the status of the server
+		And I should destroy the server
+		And I should destroy the associated storage
+		And I should undefine the server
+	
