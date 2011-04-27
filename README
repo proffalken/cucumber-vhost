@@ -15,7 +15,7 @@ The software contained in this package are Copyright (c) 2010 Matthew Macdonald-
 
 You should have received a copy of the GNU General Public License along with cucumber-vhost.  If not, see http://www.gnu.org/licenses/.
 
-
+To configure the system, you will need to edit 'config.yml' and set it up for your network
 
 EXAMPLE 
 =======
@@ -55,6 +55,6 @@ Feature: Testing Vhosts
 		And I should undefine the server					# Undefine the system - this removes all traces of the system
 		
 
-[0] A caveat - for this to work correctly, you can't use port 22 because the Redhat Installer starts a SSH daemon during the install which means this test suceeds before the server is fully provisioned.  I recommend setting the vale of "port" to the service that you are testing and you'll need to make sure the firewall is set to allow traffic on that port before this test will succeed.  
+[0] A caveat - for this to work correctly, you can't use port 22 because the Redhat Installer starts a SSH daemon during the install which means this test succeeds before the server is fully provisioned.  I recommend setting the vale of "port" to the service that you are testing and you'll need to make sure the firewall is set to allow traffic on that port before this test will succeed.  
 
 The code has been written to wait until the ping succeeds and the same is true for the port checker - if you need mroe flexibility than this, please feel free to fork and then merge back the changes!

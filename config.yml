@@ -1,8 +1,20 @@
+# Configuration file for cucumber-vhost
+#
+# Change the settings below to reflect your environment
+
+######  COBBLER ######
 cobbler:
-    server:       localhost
-    port:         80
+    server:       localhost # The server which is running the cobbler XMLRPC API
+
+    port:         80        # The port number to connect to for accessing the API
+
 libvirt:
-    driver:       qemu # can be any of the libvirt drivers documented at libvirt.org
-    host:          # the host to connect to (leave blank for localhost)
-    type:         system # can be "system" or "user"
-    storage_pool: default
+    driver:       qemu      # The libvirt driver to use as documented at http://libvirt.org/drivers.html#hypervisor
+
+    host:                   # The host to connect and launch the virtual machines (leave blank for localhost)
+
+    type:         system    # How to connect to the hypervisor (see man virsh(1) for more information) 
+                            # "system" connects to qemu as root, "session" connects to qemu as the current user.
+                            # Leave blank if using Xen as the driver
+                            
+    storage_pool: default   # The name of the libvirt storage pool to use
