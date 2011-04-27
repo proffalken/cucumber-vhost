@@ -1,0 +1,8 @@
+cobbler:
+    server:       localhost
+    port:         80
+libvirt:
+    driver:       qemu # can be any of the libvirt drivers documented at libvirt.org
+    host:          # the host to connect to (leave blank for localhost)
+    type:         system # can be "system" or "user"
+    storage_pool: default
