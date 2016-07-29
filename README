@@ -24,7 +24,7 @@ This script is the basis for launching a VM and checking that it is up
 After that, it's all over to you! :)
 
 An example that uses all of the steps that are currently available is below (Comments at the end of each line following a #), feel free to add extra steps...
-```
+
 Feature: Testing Vhosts
 	This feature is to be used to create and manage vhosts
 
@@ -54,7 +54,7 @@ Feature: Testing Vhosts
 		And I should destroy the associated storage				# Destroy the associated Storage
 		And I should undefine the server					# Undefine the system - this removes all traces of the system
 		
-```
+
 [0] A caveat - for this to work correctly, you can't use port 22 because the Redhat Installer starts a SSH daemon during the install which means this test succeeds before the server is fully provisioned.  I recommend setting the vale of "port" to the service that you are testing and you'll need to make sure the firewall is set to allow traffic on that port before this test will succeed.  
 
 The code has been written to wait until the ping succeeds and the same is true for the port checker - if you need mroe flexibility than this, please feel free to fork and then merge back the changes!
